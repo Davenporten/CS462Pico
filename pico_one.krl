@@ -1,6 +1,6 @@
 ruleset pico_one {
 	meta {
-		name
+		name "Pico One"
 		description <<
 For the first lab with picos
 >>
@@ -21,7 +21,8 @@ For the first lab with picos
 				{ "name": "__testing" }
 			],
 			"events": [
-				{ "domain": "echo", "type": "hello" }
+				{ "domain": "echo", "type": "hello" },
+                                { "domain": "echo", "type": "message", "attrs": [ "input" ] }
 			]
 		}
 	}
@@ -44,3 +45,4 @@ For the first lab with picos
 	}
 
 }
+
