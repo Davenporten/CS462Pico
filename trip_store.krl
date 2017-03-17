@@ -8,6 +8,7 @@ Last ruleset for pico lab
 	    author "Ray Clinton"
     	logging on
     	shares __testing, trips, long_trips, short_trips
+        provides trips, long_trips, short_trips
 	}
 
   	global {
