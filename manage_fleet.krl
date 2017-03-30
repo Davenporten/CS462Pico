@@ -47,7 +47,7 @@ Ruleset for managing a fleet
 		fired {
 		} else {
 			ent:vins := ent:vins.defaultsTo([]).union([vin]);
-			ent:subs := Subscriptions:getSubscriptions()
+			ent:subs := Subscriptions:getSubscriptions();
 			raise pico event "new_child_request"
       			attributes { "dname": nameFromID(vin) }
 		}
