@@ -8,7 +8,7 @@ Ruleset for managing a fleet
 		author "Ray Clinton"
 		logging on
 		use module Subscriptions
-                use module v1_wrangler alias wrangler
+//        use module v1_wrangler alias wrangler
 		shares __testing, nameFromID, vehicles, my_vins
 	}
 
@@ -159,13 +159,15 @@ Ruleset for managing a fleet
                    //test = ent:vins
                    //test = test.filter(function(x) {x neq vin}).klog("test")
               }
-              if(not name.isnull()) then 
-                   wrangler:deleteChild(name)
+//              if(not name.isnull()) then 
+//                   wrangler:deleteChild(name)
               
               always {
                    //ent:vins := ent:vins.filter(function(x){x neq vin});
                    raise wrangler event "subscription_cancellation"
                           with subscription_name = name
+                   raise wrangler event "child_deletion"
+                          attributes{ "id": name, "eci": meta:eci }
               }
         }
 
