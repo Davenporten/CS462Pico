@@ -8,6 +8,7 @@ Ruleset for managing a fleet
 		author "Ray Clinton"
 		logging on
 		use module Subscriptions
+                use module io.picolabs.pico alias wrangler
 //        use module v1_wrangler alias wrangler
 		shares __testing, nameFromID, vehicles, my_vins
 	}
@@ -34,7 +35,13 @@ Ruleset for managing a fleet
 		}
 
 		vehicles = function() {
-                      Subscriptions:getSubscriptions().klog("Subscriptions: ")
+                      subs = Subscriptions:getSubscriptions().klog("Subscriptions: ");
+                      chillin = wrangler:children();
+                      event:send({ 
+				"eid": "list-trips",
+				"domain": "car", "type": "list_trips",
+				"attrs": { "chillin": chillin, "subs": subs } 
+		      })
 		}
 
                 reset = {}
@@ -157,7 +164,8 @@ Ruleset for managing a fleet
                    name = event:attr("name").klog("name")
                    vin = event:attr("vin").klog("vin")
                    //test = ent:vins
-                   //test = test.filter(function(x) {x neq vin}).klog("test")
+                   //test = test.filter(function(v,k) {k neq vin}).klog("test")
+                   test = meta:eci.klog("eci")
               }
 //              if(not name.isnull()) then 
 //                   wrangler:deleteChild(name)
@@ -165,12 +173,18 @@ Ruleset for managing a fleet
               always {
                    //ent:vins := ent:vins.filter(function(x){x neq vin});
                    raise wrangler event "subscription_cancellation"
-                          with subscription_name = name
-                   raise wrangler event "child_deletion"
-                          attributes{ "id": name, "eci": meta:eci }
+                          with subscription_name = name;
+                   raise pico event "delete_child_request"
+                          attributes{ "id": name, "eci":  }
               }
         }
 
-}
+        rule lister {
+              select when car list_trips
+              foreach event:attr("chillin") setting (x)
+                    
 
+        }
+
+}
 
